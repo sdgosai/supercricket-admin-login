@@ -8,31 +8,31 @@ const catchAsyncerr = require('../middleware/catchAsyncerr');
 exports.registrationControll = catchAsyncerr(async (req, res, next) => {
     const { username, number, budget, password, confirmPassword } = req.body;
     if (!username) {
-        return res.send({
+        return res.status(400).send({
             success: false,
             message: 'Please enter name'
         })
     }
     if (!number) {
-        return res.send({
+        return res.status(400).send({
             success: false,
             message: 'Please enter number'
         })
     }
     if (!budget) {
-        return res.send({
+        return res.status(400).send({
             success: false,
             message: 'Please enter budget'
         })
     }
     if (!password) {
-        return res.send({
+        return res.status(400).send({
             success: false,
             message: 'Please enter password'
         })
     }
     if (!confirmPassword) {
-        return res.send({
+        return res.status(400).send({
             success: false,
             message: 'Please confirm password'
         })
@@ -45,13 +45,13 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
                         if (match) {
                             tokenSender(user, 200, res)
                         } else {
-                            res.send({
+                            res.status(400).send({
                                 success: false, message: 'Number or password is incorrect'
                             })
                         }
                     }).catch(err => {
                         console.log(err);
-                        res.send({
+                        res.status(400).send({
                             success: false,
                             message: 'Failed',
                             err: err
@@ -72,13 +72,13 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
                         if (save) {
                             tokenSender(save, 200, res)
                         } else {
-                            res.send({
+                            res.status(400).send({
                                 success: false,
                                 message: 'Unable to login'
                             })
                         }
                     } else {
-                        res.send({
+                        res.status(400).send({
                             success: false,
                             message: 'Unable to register'
                         })
@@ -89,16 +89,16 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
                     success: false,
                     message: 'Confirm password must be same as password'
                 })
-            }// ? kya problem ?? test krto tyare e err avi hti atayre kr joye aga
+            }
         }
     }).catch(e => {
-        res.send({
+        res.status(400).send({
             success: false,
             message: 'Failed',
             error: e
         })
     }).catch(e => {
-        res.send({
+        res.status(400).send({
             success: false,
             message: 'Failed',
             error: e
