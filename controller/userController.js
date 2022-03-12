@@ -9,19 +9,19 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
     const { username, number, budget } = req.body;
     if (!username) {
         return res.status(400).send({
-            success: false,
+            status: false,
             message: 'Please enter name'
         })
     }
     if (!number) {
         return res.status(400).send({
-            success: false,
+            status: false,
             message: 'Please enter number'
         })
     }
     if (!budget) {
         return res.status(400).send({
-            success: false,
+            status: false,
             message: 'Please enter budget'
         })
     }
