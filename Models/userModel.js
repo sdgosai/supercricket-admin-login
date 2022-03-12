@@ -16,10 +16,6 @@ const userSchema = new Schema({
     budget: {
         type: Number
     },
-    password: {
-        type: String,
-        select: false
-    },
     role: {
         type: Number,
         default: 0,

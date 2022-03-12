@@ -6,7 +6,7 @@ const catchAsyncerr = require('../middleware/catchAsyncerr');
 
 // Registration Controller ...
 exports.registrationControll = catchAsyncerr(async (req, res, next) => {
-    const { username, number, budget, password, confirmPassword } = req.body;
+    const { username, number, budget } = req.body;
     if (!username) {
         return res.status(400).send({
             success: false,
@@ -25,84 +25,39 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
             message: 'Please enter budget'
         })
     }
-    if (!password) {
-        return res.status(400).send({
-            success: false,
-            message: 'Please enter password'
-        })
-    }
-    if (!confirmPassword) {
-        return res.status(400).send({
-            success: false,
-            message: 'Please confirm password'
-        })
-    }
-    User.findOne({ number: number }).select('+password').then(user => {
-        if (user) {
-            if (password === confirmPassword) {
-                compare(password, user.password)
-                    .then(match => {
-                        if (match) {
-                            tokenSender(user, 200, res)
-                        } else {
-                            res.status(400).send({
-                                success: false, message: 'Number or password is incorrect'
-                            })
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                        res.status(400).send({
-                            success: false,
-                            message: 'Failed',
-                            err: err
-                        })
-                    })
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Confirm password must be same as password'
-                })
-            }
+    User.findOne({ number: number }).then(numberSave => {
+        if (numberSave) {
+            res.status(400).send({
+                status: true,
+                message: "Number already exists"
+            })
         } else {
-            if (password === confirmPassword) {
-                User.create({
-                    username, number, password, budget
-                }).then(save => {
-                    if (save) {
-                        if (save) {
-                            tokenSender(save, 200, res)
-                        } else {
-                            res.status(400).send({
-                                success: false,
-                                message: 'Unable to login'
-                            })
-                        }
-                    } else {
-                        res.status(400).send({
-                            success: false,
-                            message: 'Unable to register'
-                        })
-                    }
+            User.create({
+                username,
+                number,
+                budget
+            }).then(save => {
+                if (save) {
+                    res.status(201).send({
+                        status: true,
+                        message: "User created"
+                    })
+                } else {
+                    res.status(400).send({
+                        status: true,
+                        message: "Can not create user"
+                    })
+                }
+            }).catch(err => {
+                console.log(err);
+                res.status(400).send({
+                    status: false,
+                    message: 'Failed',
+                    err: err
                 })
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Confirm password must be same as password'
-                })
-            }
+
+            })
         }
-    }).catch(e => {
-        res.status(400).send({
-            success: false,
-            message: 'Failed',
-            error: e
-        })
-    }).catch(e => {
-        res.status(400).send({
-            success: false,
-            message: 'Failed',
-            error: e
-        })
     })
 });
 
