@@ -60,26 +60,26 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
         }
     })
 });
-exports.userList = catchAsyncerr(async(req,res,next) => {
+exports.userList = catchAsyncerr(async (req, res, next) => {
     User.find().select('-createdAt -updatedAt -__v -password -role').then(list => {
-        if(list.length){
+        if (list.length) {
             return res.status(200).send({
                 status: true,
                 message: 'List of users data',
-                data:list
+                data: list
             })
-        }else{
+        } else {
             return res.status(200).send({
                 status: false,
                 message: 'User data list is empty'
             })
         }
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err);
         return res.status(400).send({
             status: false,
             message: 'Failed',
-            err:err
+            err: err
         })
     })
 })
