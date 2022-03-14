@@ -60,6 +60,29 @@ exports.registrationControll = catchAsyncerr(async (req, res, next) => {
         }
     })
 });
+exports.userList = catchAsyncerr(async(req,res,next) => {
+    User.find().select('-createdAt -updatedAt -__v -password -role').then(list => {
+        if(list.length){
+            return res.status(200).send({
+                status: true,
+                message: 'List of users data',
+                data:list
+            })
+        }else{
+            return res.status(200).send({
+                status: false,
+                message: 'User data list is empty'
+            })
+        }
+    }).catch(err =>{
+        console.log(err);
+        return res.status(400).send({
+            status: false,
+            message: 'Failed',
+            err:err
+        })
+    })
+})
 
 // login Controller ...
 // exports.LoginControll = catchAsyncerr(async (req, res, next) => {
